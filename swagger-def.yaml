@@ -1,0 +1,67 @@
+swagger: "2.0"
+info:
+  description: "Endpoint that is responsible for providing the mapping between mail templates and the experience fragments used."
+  version: "1.0.0"
+  title: "Personalization endpoint"
+host: "example.api"
+basePath: "/v1"
+schemes:
+- "https"
+paths:
+  /mapping:
+    post:
+      summary: "Returns the mapping for requested mail template"
+      description: "Returns the mapping of all experience fragments on the requested mail template which is defined in the body of this GET request."
+      operationId: "retrieveMapping"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "requestBody"
+        description: "Define the mail template where you want to retrieve the mapping for"
+        required: true
+        schema:
+          $ref: "#/definitions/RequestBody"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: '#/definitions/MailMapping'
+        "404":
+          description: "Not found, the requested mail template could not be retrieved"
+definitions:
+  RequestBody:
+    type: "object"
+    properties:
+      path:
+        type: "string"
+        description: "Defines the path of the mail template that you want to retrieve mapping for"
+  MailMapping:
+    type: "object"
+    properties:
+      deliveryTemplate:
+        type: "string"
+      blocks:
+        type: "array"
+        items:
+          $ref: '#/definitions/Block'
+  Block:
+    type: "object"
+    properties:
+      block:
+        type: "string"
+      experienceFragment:
+        $ref: '#/definitions/ExperienceFragment'
+  ExperienceFragment:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      uniqueID:
+        type: "string"
+      distributor:
+        type: "string"
+      language:
+        type: "string"
+      path:
+        type: "string"
